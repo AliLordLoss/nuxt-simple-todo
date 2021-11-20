@@ -33,6 +33,10 @@ export const actions = {
   editTodo({ commit }, { todo }) {
     commit('EDIT_TODO', { todo })
   },
+
+  sortTodos({ commit }, { threadId }) {
+    commit('SORT_TODOS', { threadId })
+  },
 }
 
 export const mutations = {
@@ -65,5 +69,9 @@ export const mutations = {
 
   EDIT_TODO(state, { todo }) {
     this._vm.$set(state.threads[todo.threadId].todos, todo.id, todo)
-  }
+  },
+
+  SORT_TODOS(state, { threadId }) {
+    state.threads[threadId].todos.sort((a, b) => (a.text > b.text) ? 1 : ((b.text > a.text) ? -1 : 0))
+  },
 }
