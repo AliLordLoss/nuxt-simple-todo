@@ -20,6 +20,7 @@ export default {
   },
   methods: {
     addTodo() {
+      if (!this.text) return
       this.$store.dispatch('addTodo', {
         todo: { text: this.text, threadId: this.threadId },
         threadId: this.threadId,
