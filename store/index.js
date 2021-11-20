@@ -29,6 +29,10 @@ export const actions = {
   bringTodoDown({ commit }, { id, threadId }) {
     commit('SWAP_TODO_WITH_NEXT', { id, threadId })
   },
+
+  editTodo({ commit }, { todo }) {
+    commit('EDIT_TODO', { todo })
+  },
 }
 
 export const mutations = {
@@ -58,4 +62,8 @@ export const mutations = {
     this._vm.$set(state.threads[threadId].todos, id + 1, { ...state.threads[threadId].todos[id], id: id + 1 })
     this._vm.$set(state.threads[threadId].todos, id, temp)
   },
+
+  EDIT_TODO(state, { todo }) {
+    this._vm.$set(state.threads[todo.threadId].todos, todo.id, todo)
+  }
 }

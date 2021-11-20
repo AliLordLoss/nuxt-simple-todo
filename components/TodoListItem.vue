@@ -1,15 +1,22 @@
 <template>
-  <div>
+  <div v-if="!editing">
     <h3>{{ todo.text }}</h3>
     <div>
-      <MyBtn icon="mdi-briefcase-remove" color="red" @click="removeTodo" />
+      <MyBtn icon="mdi-briefcase-minus" color="red" @click="removeTodo" />
 
-      <MyBtn icon="mdi-briefcase-edit" color="blue" />
+      <MyBtn icon="mdi-briefcase-edit" color="blue" @click="edit" />
 
       <MyBtn icon="mdi-briefcase-upload" :disabled="first" @click="moveUp" />
 
       <MyBtn icon="mdi-briefcase-download" :disabled="last" @click="moveDown" />
     </div>
+  </div>
+  <div v-else>
+    <v-text-field v-model="text"></v-text-field>
+
+    <MyBtn icon="mdi-briefcase-remove" color="orange" @click="cancelEdit" />
+
+    <MyBtn icon="mdi-briefcase-check" color="green" @click="saveEdit" />
   </div>
 </template>
 
@@ -29,12 +36,34 @@ export default {
       default: false,
     },
   },
+  data() {
+    return {
+      editing: false,
+      text: this.todo.text,
+    }
+  },
   methods: {
     removeTodo() {
       this.$store.dispatch('removeTodo', {
         id: this.todo.id,
         threadId: this.todo.threadId,
       })
+    },
+
+    edit() {
+      this.editing = true
+    },
+
+    cancelEdit() {
+      this.text = this.todo.text
+      this.editing = false
+    },
+
+    saveEdit() {
+      this.$store.dispatch('editTodo', {
+        todo: { ...this.todo, text: this.text },
+      })
+      this.editing = false
     },
 
     moveUp() {
