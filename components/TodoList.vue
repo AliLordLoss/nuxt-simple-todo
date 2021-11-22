@@ -1,6 +1,7 @@
 <template>
   <div class="todo-list">
     <MyBtn
+      v-if="todos.length > 0"
       icon="mdi-sort-alphabetical-variant"
       color="purple"
       @click="sortTodos"

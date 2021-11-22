@@ -47,6 +47,15 @@ export const actions = {
   editThread({ commit }, { thread }) {
     commit('EDIT_THREAD', { thread })
   },
+
+  removeThread({ commit, state }, { id }) {
+    const newThreads = {}
+    const newThreadsArray = Object.values(state.threads).filter(thread => thread.id !== id)
+    newThreadsArray.forEach((thread, index) => {
+      newThreads[index] = { ...thread, id: index }
+    })
+    commit('SET_THREADS', { newThreads, newThreadsCount: newThreadsArray.length })
+  },
 }
 
 export const mutations = {
@@ -88,5 +97,10 @@ export const mutations = {
 
   EDIT_THREAD(state, { thread }) {
     state.threads[thread.id] = thread
+  },
+
+  SET_THREADS(state, { newThreads, newThreadsCount }) {
+    state.threads = newThreads
+    state.threadsCount = newThreadsCount
   }
 }

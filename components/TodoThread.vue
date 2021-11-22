@@ -3,6 +3,7 @@
     <div v-if="!editing">
       <h1>{{ thread.title }}</h1>
       <MyBtn icon="mdi-pencil" color="blue" @click="edit" />
+      <MyBtn icon="mdi-minus" color="red" @click="removeThread" />
     </div>
     <div v-else>
       <v-text-field v-model="title"></v-text-field>
@@ -63,6 +64,10 @@ export default {
         thread: { ...this.thread, title: this.title },
       })
       this.editing = false
+    },
+
+    removeThread() {
+      this.$store.dispatch('removeThread', { id: this.thread.id })
     },
   },
 }
