@@ -1,15 +1,7 @@
 <template>
   <div>
     <v-container>
-      <TodoThread :thread="{ id: 0, title: 'thread #1' }" />
+      <TodoThreadList :threads="this.$store.getters.threadsArray" />
     </v-container>
   </div>
 </template>
-
-<script>
-export default {
-  created() {
-    this.$store.commit('CREATE_THREAD', { title: 'thread #1' })
-  },
-}
-</script>

@@ -4,7 +4,9 @@ export const state = () => ({
 })
 
 export const getters = {
-
+  threadsArray(state) {
+    return Object.values(state.threads)
+  }
 }
 
 export const actions = {
@@ -37,6 +39,14 @@ export const actions = {
   sortTodos({ commit }, { threadId }) {
     commit('SORT_TODOS', { threadId })
   },
+
+  createThread({ commit }, { title }) {
+    commit('CREATE_THREAD', { title })
+  },
+
+  editThread({ commit }, { thread }) {
+    commit('EDIT_THREAD', { thread })
+  },
 }
 
 export const mutations = {
@@ -49,7 +59,7 @@ export const mutations = {
   },
 
   CREATE_THREAD(state, { title }) {
-    state.threads[state.threadsCount] = { title, id: state.threadsCount, todos: [] }
+    this._vm.$set(state.threads, state.threadsCount, { title, id: state.threadsCount, todos: [] })
     state.threadsCount++
   },
 
@@ -73,5 +83,10 @@ export const mutations = {
 
   SORT_TODOS(state, { threadId }) {
     state.threads[threadId].todos.sort((a, b) => (a.text > b.text) ? 1 : ((b.text > a.text) ? -1 : 0))
+    state.threads[threadId].todos = state.threads[threadId].todos.map((todo, index) => ({ ...todo, id: index }))
   },
+
+  EDIT_THREAD(state, { thread }) {
+    state.threads[thread.id] = thread
+  }
 }
