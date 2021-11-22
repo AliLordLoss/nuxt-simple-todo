@@ -6,9 +6,17 @@
 
       <MyBtn icon="mdi-briefcase-edit" color="blue" @click="edit" />
 
-      <MyBtn icon="mdi-briefcase-upload" :disabled="first" @click="moveUp" />
+      <MyBtn
+        icon="mdi-briefcase-upload"
+        :disabled="first || disableOrder"
+        @click="moveUp"
+      />
 
-      <MyBtn icon="mdi-briefcase-download" :disabled="last" @click="moveDown" />
+      <MyBtn
+        icon="mdi-briefcase-download"
+        :disabled="last || disableOrder"
+        @click="moveDown"
+      />
     </div>
   </div>
   <div v-else>
@@ -35,6 +43,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    disableOrder: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -51,15 +63,18 @@ export default {
     },
 
     edit() {
+      this.$emit('edit')
       this.editing = true
     },
 
     cancelEdit() {
+      this.$emit('end-edit')
       this.text = this.todo.text
       this.editing = false
     },
 
     saveEdit() {
+      this.$emit('end-edit')
       this.$store.dispatch('editTodo', {
         todo: { ...this.todo, text: this.text },
       })
