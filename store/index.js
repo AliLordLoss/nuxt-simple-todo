@@ -1,3 +1,13 @@
+export const plugins = [store => {
+  // called when the store is initialized
+  store.subscribe((mutation, state) => {
+    // called after every mutation.
+    // The mutation comes in the format of `{ type, payload }`.
+    if (state.threadsCount) localStorage.setItem('threads', JSON.stringify(state.threads))
+    else localStorage.removeItem('threads')
+  })
+}]
+
 export const state = () => ({
   threads: {},
   threadsCount: 0
@@ -10,12 +20,6 @@ export const getters = {
 }
 
 export const actions = {
-  fetchThreadTodos({ state }, { threadId }) {
-    return new Promise((resolve) => {
-      resolve(state.threads[threadId].todos)
-    });
-  },
-
   addTodo({ commit, state }, { todo, threadId }) {
     commit('ADD_TODO', { todo: { ...todo, id: state.threads[threadId].todos.length }, threadId })
   },
@@ -55,6 +59,21 @@ export const actions = {
       newThreads[index] = { ...thread, id: index }
     })
     commit('SET_THREADS', { newThreads, newThreadsCount: newThreadsArray.length })
+  },
+
+  setThreads({ commit }, { threads }) {
+    commit('SET_THREADS', { newThreads: threads, newThreadsCount: Object.keys(threads).length })
+  },
+
+  fetchThreadsFromLocalStorage({ dispatch }) {
+    return new Promise((resolve, reject) => {
+      const threads = localStorage.getItem('threads')
+      if (threads) {
+        dispatch('setThreads', { threads: JSON.parse(threads) })
+      }
+
+      resolve()
+    });
   },
 }
 

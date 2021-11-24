@@ -5,3 +5,11 @@
     </v-container>
   </div>
 </template>
+
+<script>
+export default {
+  mounted() {
+    this.$store.dispatch('fetchThreadsFromLocalStorage')
+  },
+}
+</script>
